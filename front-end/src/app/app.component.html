@@ -1,0 +1,45 @@
+<div class="container row">
+	<h1>Testing</h1>
+
+	<div class="col s12 m4">
+		<div class="col s12">
+			<div class="col s12">
+				<button class="btn" style="width: 100%" (click)="getChartData()">Refresh Chart</button>
+			</div>
+			<div class="col s12" style="margin-top: 1rem;">
+				<button class="btn" style="width: 100%" (click)="updateData()">Grab new matches</button>
+				<p>Last grabbed on {{ date | date:'medium' }}</p>
+			</div>
+		</div>
+		<div class="col s12 input-field">
+			<select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
+				<option selected value="season_5_2018">Season 5 - 2018</option>
+			</select>
+			<select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
+				<option selected [value]=undefined>Select a Team</option>
+				<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+			</select>
+			<select [(ngModel)]="teamTwo" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
+				<option selected [value]=undefined>Select a Team</option>
+				<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+			</select>
+			<select [(ngModel)]="roundsMaps" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
+				<option selected value="rounds">Rounds Won</option>
+				<option value="maps">Maps Won</option>
+			</select>
+		</div>
+		<div class="col s12 input-field">
+			<div class="col s12">
+				<input name="season_url" type="text" [(ngModel)]="season_url" />
+			</div>
+			<div class="col s12">
+				<button class="btn" style="width: 100%" [disabled]="season_url == undefined || data_loading" (click)="getOlderData()">{{ data_string }}</button>
+			</div>
+		</div>
+	</div>
+	<div class="col s12 m8">
+		<div id="chartContainer" style="height: 300px; width: 100%; display: inline-block; margin-bottom: 2rem">
+			<canvas id="canvas">{{ chart }}</canvas>
+		</div>
+	</div>
+</div>
