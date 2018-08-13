@@ -7,8 +7,8 @@ services:
       - ./api:/usr/src/api
     build: ./api
     ports:
-      - "4000:4000"
-    command: nodemon index.js
+      - "5000:5000"
+    command: python index.py
   web_frontend:
     container_name: fontend
     restart: always
