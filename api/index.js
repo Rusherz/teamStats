@@ -1,9 +1,11 @@
 let func = require('./function/function');
 let MatchFunctions = require('./function/MatchFunctions');
 let TeamFunctions = require('./function/TeamFunctions');
+let db = require('./config/db');
 let express = require('express');
 let path = require('path')
 let app = express();
+let configRoute = require('./routes/config')
 let bodyParser = require("body-parser");
 let request = require('request');
 let cheerio = require('cheerio');
@@ -26,21 +28,21 @@ app.get('/', (req, res) => {
     func.resetCallbackVariables(function () {
         func.getMatches(function () {
             func.getAllMatchInfo(season, function () {
-                MatchFunctions.updateLastDate(season, function () {
-                    MatchFunctions.getLastUpdated(season, function (data) {
-                        res.json(data);
-                    });
+                MatchFunctions.updateLastDate(season, function (data) {
+                    res.json(data);
                 });
             });
         });
     })
 });
 
+app.use('/config', configRoute);
+
 app.get('/getLastUpdated', (req, res) => {
     MatchFunctions.getLastUpdated(req.query['season'], function (data) {
         res.json(data);
     });
-})
+});
 
 app.post('/seasonData', (req, res) => {
     func.resetCallbackVariables(function () {
@@ -50,25 +52,12 @@ app.post('/seasonData', (req, res) => {
             })
         })
     })
-})
+});
 
 app.get('/findTeam', (req, res) => {
     MatchFunctions.fineOneTeamMatches('Stone Cold Killers', function (data) {
         res.json(data);
     })
-});
-
-app.get('/getwinloss', (req, res) => {
-    TeamFunctions.findOneTeam('Stone Cold Killers', function (result) {
-        let chartWinArray = [{
-            type: 'column',
-            label: '',
-            dataPoints: []
-        }];
-        let chartLossArray = []
-
-        res.json(result);
-    });
 });
 
 app.post('/chartwinloss', (req, res) => {
@@ -159,149 +148,7 @@ app.post('/chartwinloss', (req, res) => {
     }
 })
 
-app.get('/insertTeam', (req, res) => {
-    TeamFunctions.insertOneTeam('Stone Cold Killers', function (data) {
-        res.json(data);
-    })
-})
-
-app.get('/updateOneMap', (req, res) => {
-    TeamFunctions.updateOneMap(function (data) {
-        res.json(data);
-    });
-})
-
-
-
-app.get('/allTeamNames', (req, res) => {
-    TeamFunctions.getTeamNames(req.query['season'], function (data) {
-        res.json(data);
-    })
-});
-
-
-/*
-
-    Only used for initalizing the teams database SHOULD NEVER BE CALL OTHER WISE
-
-*/
-app.get('/createTeams', (req, res) => {
-    MatchFunctions.findAllMatches(function (data) {
-        let count = 0;
-        let teamNames = [];
-        for (let match of data) {
-            if (teamNames.indexOf(match['homeTeam']) == -1 && match['homeTeam'] != undefined && match['homeTeam'] != null && match['homeTeam'] != '' && match['homeTeam'] != 'undefined') teamNames.push(match['homeTeam']);
-            if (teamNames.indexOf(match['awayTeam']) == -1 && match['homeTeam'] != undefined && match['homeTeam'] != null && match['homeTeam'] != '' && match['homeTeam'] != 'undefined') teamNames.push(match['awayTeam']);
-            count++
-            if (count == data.length - 1) {
-                let second_count = 0;
-                for (let teamName of teamNames) {
-                    if (teamName != undefined || teamName != '') {
-                        TeamFunctions.insertOneTeam(teamName, function () {
-                            second_count++;
-                            if (second_count == teamNames.length - 1) res.send('done');
-                        })
-                    }else{
-                        second_count++;
-                        if (second_count == teamNames.length - 1) res.send('done');
-                    }
-                }
-            }
-        }
-    });
-});
-
-/*
-
-    Used all the data from the database and initalizes the team scores. This will add already
-    calculated maps into the score.
-
-*/
-app.get('/setWinLoss', (req, res) => {
-    MatchFunctions.findAllMatches(function (matches) {
-        let count = 0;
-        for (let match of matches) {
-            if(match['type'] == 'date') continue;
-            for (let i = 1; i < 4; i++) {
-                let homeTeamMap = {
-                    teamName: match['homeTeam'],
-                    map: match['map' + i]['mapName'].toLowerCase().split(" ")[0],
-                    roundsWon: parseInt(match['map' + i]['scoreHome']),
-                    roundsLoss: parseInt(match['map' + i]['scoreAway'])
-                }
-                let awayTeamMap = {
-                    teamName: match['awayTeam'],
-                    map: match['map' + i]['mapName'].toLowerCase().split(" ")[0],
-                    roundsWon: parseInt(match['map' + i]['scoreAway']),
-                    roundsLoss: parseInt(match['map' + i]['scoreHome'])
-                }
-                TeamFunctions.updateOneMap(homeTeamMap, function(){
-                    TeamFunctions.updateOneMap(awayTeamMap, function(){
-                        if( i == 3){
-                            count++;
-                            if(count == matches.length - 1){
-                                res.send('done');
-                            }
-                        }
-                    })
-                })
-            }
-        }
-    })
-});
-
 app.listen(4000, (err) => {
     if (err) console.error(err)
     console.info("server started on port 4000");
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-app.get('/allmatches', (req, res) => {
-    findAllMatches(function(result) {
-        res.json(result);
-    });
-}); */
-

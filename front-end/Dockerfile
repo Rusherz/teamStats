@@ -5,5 +5,3 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 RUN npm install
 RUN npm install -g @angular/cli@1.7.1
-
-CMD ng serve --host 0.0.0.0

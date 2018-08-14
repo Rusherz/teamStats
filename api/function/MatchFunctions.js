@@ -30,6 +30,7 @@ let MatchFunctions = {
         });
     },
     'updateLastDate': (season, callback) => {
+        let date = new Date().toUTCString();
         db.updateOne({
             database: season,
             collection: 'matches',
@@ -42,10 +43,10 @@ let MatchFunctions = {
             }
         }, {
                 $set: {
-                    DATE: new Date().toUTCString()
+                    date: date
                 }
             }, function (data) {
-                callback(data);
+                callback(date);
             })
     },
     'getLastUpdated': (season, callback) => {

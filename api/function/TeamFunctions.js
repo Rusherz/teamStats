@@ -11,7 +11,7 @@ let TeamFunctions = {
             filters: {
                 team: 1
             }
-        }, function(data){
+        }, function (data) {
             callback(data);
         })
     },
@@ -33,7 +33,7 @@ let TeamFunctions = {
                     collection: 'teams',
                     query: {},
                     filters: {}
-                }, team, function(result){
+                }, team, function (result) {
                     callback();
                 })
             }
@@ -87,28 +87,71 @@ let TeamFunctions = {
     },
     'updateOneMap': (season, mapData, callback) => {
         if (mapData['map'] != 'other') {
-            let update = {}
-            update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
-            update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
-            if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
-                update[mapData['map'] + '.maps.win'] = 1;
-                update[mapData['map'] + '.maps.loss'] = 0;
-            } else {
-                update[mapData['map'] + '.maps.win'] = 0;
-                update[mapData['map'] + '.maps.loss'] = 1;
-            }
-            db.updateOne({
+            db.findOne({
                 database: season,
                 collection: 'teams',
                 query: {
                     'team': mapData['teamName']
-                },
-                filters: {}
-            }, {
-                    $inc: update
-                }, function (data) {
-                    callback();
-                })
+                }
+            }, function (data) {
+                if (data) {
+                    let update = {}
+                    update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
+                    update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
+                    if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
+                        update[mapData['map'] + '.maps.win'] = 1;
+                        update[mapData['map'] + '.maps.loss'] = 0;
+                    } else {
+                        update[mapData['map'] + '.maps.win'] = 0;
+                        update[mapData['map'] + '.maps.loss'] = 1;
+                    }
+                    db.updateOne({
+                        database: season,
+                        collection: 'teams',
+                        query: {
+                            'team': mapData['teamName']
+                        },
+                        filters: {}
+                    }, {
+                            $inc: update
+                        }, function (data) {
+                            callback();
+                        })
+                } else {
+                    let team = {};
+                    Object.assign(team, Team);
+                    team['team'] = mapData['teamName'];
+                    db.insertOne({
+                        database: season,
+                        collection: 'teams',
+                        query: {},
+                        filters: {}
+                    }, team, function (result) {
+                        let update = {}
+                        update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
+                        update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
+                        if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
+                            update[mapData['map'] + '.maps.win'] = 1;
+                            update[mapData['map'] + '.maps.loss'] = 0;
+                        } else {
+                            update[mapData['map'] + '.maps.win'] = 0;
+                            update[mapData['map'] + '.maps.loss'] = 1;
+                        }
+                        db.updateOne({
+                            database: season,
+                            collection: 'teams',
+                            query: {
+                                'team': mapData['teamName']
+                            },
+                            filters: {}
+                        }, {
+                                $inc: update
+                            }, function (data) {
+                                callback();
+                            })
+                    })
+                }
+            })
         } else {
             callback();
         }
@@ -180,11 +223,11 @@ let Team = {
     tanker: {
         maps: {
             win: 0,
-            loss:  0
+            loss: 0
         },
         rounds: {
             win: 0,
-            loss:  0
+            loss: 0
         }
     }
 
