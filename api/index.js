@@ -148,6 +148,41 @@ app.post('/chartwinloss', (req, res) => {
     }
 })
 
+app.get('/allTeamNames', (req, res) => {
+    TeamFunctions.getTeamNames(req.query['season'], function (result) {
+        res.json(result);
+    })
+})
+
+app.get('/gunstats', (req, res) => {
+    db_params = {
+        database: 'gunStats',
+        collection: 'gunStats',
+        query: {},
+        filters: {}
+    }
+    db.find(db_params, function (guns) {
+        let dataPoints = [
+
+        ]
+        let count = 0;
+        for (let gun of guns) {
+            console.log('rgb(' + Math.random() * 256 + ', ' + Math.random() * 256 + ', ' + Math.random() * 256 + ' )')
+            dataPoints.push({
+                label: gun['gun'],
+                backgroundColor: 'rgb(' + Math.random() * 256 + ', ' + Math.random() * 256 + ', ' + Math.random() * 256 + ' )',
+                fill: true,
+                data: [gun['points'], gun['damage'], gun['magSize'], gun['rof'] / 100, (gun['rof'] / 60 * gun['damage'])]
+            })
+            if (count == guns.length - 1) {
+                res.json(dataPoints);
+            } else {
+                count++;
+            }
+        }
+    })
+})
+
 app.listen(4000, (err) => {
     if (err) console.error(err)
     console.info("server started on port 4000");

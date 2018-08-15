@@ -1,6 +1,4 @@
 <div class="container row">
-	<h1>Testing</h1>
-
 	<div class="col s12 m4">
 		<div class="col s12">
 			<div class="col s12">
@@ -37,9 +35,26 @@
 			</div>
 		</div>
 	</div>
+	<!--
+
+		TEAM WIN LOSS CHART
+
+	-->
+	<h3>Team Win Loss</h3>
 	<div class="col s12 m8">
-		<div id="chartContainer" style="height: 300px; width: 100%; display: inline-block; margin-bottom: 2rem">
-			<canvas id="canvas">{{ chart }}</canvas>
+		<div id="teamWinLossChartContainer" style="height: 300px; width: 100%; display: inline-block; margin-bottom: 2rem">
+			<canvas id="teamWinLossCanvas">{{ teamWinLossChart }}</canvas>
+		</div>
+	</div>
+	<!--
+
+		GUN STAT CHART
+
+	-->
+	<h3>Gun Stats</h3>
+	<div class="col s12 m8">
+		<div id="gunStatChartContainer" style="height: 300px; width: 100%; display: inline-block; margin-bottom: 2rem">
+			<canvas id="gunStatCanvas">{{ gunStatChart }}</canvas>
 		</div>
 	</div>
 </div>

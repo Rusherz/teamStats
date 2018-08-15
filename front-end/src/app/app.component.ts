@@ -10,7 +10,12 @@ import { PlatformLocation } from '@angular/common';
 })
 export class AppComponent {
 
-	public chart = undefined;
+	/*
+
+		TEAM WIN LOSS VARIABLES
+
+	*/
+	public teamWinLossChart = undefined;
 	public teamNames: string[] = [];
 	public teamOne: string = undefined;
 	public teamTwo: string = undefined;
@@ -22,8 +27,14 @@ export class AppComponent {
 	public data_loading: boolean = false;
 	public season: string = 'season_5_2018';
 
-	private url: string = '';
+	/*
 
+		GUN STAT VARIABLES
+
+	*/
+	public gunStatChart
+
+	private url: string = '';
 	constructor(private http: HttpClient, platformLocation: PlatformLocation) {
 		this.url = 'http://' + (platformLocation as any).location.hostname;
 	}
@@ -32,12 +43,16 @@ export class AppComponent {
 		this.http.get(this.url + ':4000/getLastUpdated?season=' + this.season).subscribe(data => {
 			this.date = new Date(data['DATE']);
 		})
+		this.http.get(this.url + ':4000/gunStats').subscribe(data => {
+			
+		})
 		this.http.get(this.url + ':4000/allTeamNames?season=' + this.season).subscribe((teamNames: Object[]) => {
 			for (let teamName of teamNames) {
 				this.teamNames.push(teamName['team'])
 			}
 		});
-		this.initChart();
+		this.teamWinLossChartInit();
+		this.gunStatChartInit();
 	}
 
 	getChartData() {
@@ -49,18 +64,18 @@ export class AppComponent {
 			this.TeamNames.push(this.teamTwo)
 		}
 		this.http.post(this.url + ':4000/chartwinloss', {'season': this.season, 'teamNames': this.TeamNames, 'roundsMaps': this.roundsMaps }).subscribe(data => {
-			this.chart.data.datasets = data;
+			this.teamWinLossChart.data.datasets = data;
 			if (this.data_loading) {
 				this.data_loading = false;
 				this.data_string = 'Get Older Data';
 				this.season_url = undefined;
 			}
 			if (this.TeamNames.length > 1 && this.TeamNames.length != 0) {
-				this.chart.options.legend.display = true;
+				this.teamWinLossChart.options.legend.display = true;
 			} else {
-				this.chart.options.legend.display = false;
+				this.teamWinLossChart.options.legend.display = false;
 			}
-			this.chart.update();
+			this.teamWinLossChart.update();
 		});
 	}
 
@@ -89,15 +104,41 @@ export class AppComponent {
 		})
 	}
 
-	initChart() {
+	teamWinLossChartInit() {
 		this.http.post(this.url + ':4000/chartwinloss', {'season': this.season, 'teamNames': this.TeamNames, 'roundsMaps': 'rounds' }).subscribe(data => {
-			this.chart = undefined;
-			let canvas = <HTMLCanvasElement>document.getElementById("canvas");
+			let canvas = <HTMLCanvasElement>document.getElementById("teamWinLossCanvas");
 			let ctx = canvas.getContext("2d");
-			this.chart = new Chart(ctx, {
+			this.teamWinLossChart = new Chart(ctx, {
 				type: 'bar',
 				data: {
 					labels: ['Bazaar', 'Cargo', 'Downfall', 'Q1', 'Suburbia', 'Subway', 'Tanker'],
+					datasets: data
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					scales: {
+						xAxes: [{
+							display: true
+						}],
+						yAxes: [{
+							display: true
+						}],
+					}
+				}
+			});
+		});
+	}
+
+	gunStatChartInit(){
+		this.http.get(this.url + ':4000/gunstats').subscribe(data => {
+			let canvas = <HTMLCanvasElement>document.getElementById("gunStatCanvas");
+			let ctx = canvas.getContext("2d");
+			this.gunStatChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: ['Points', 'Damage', 'Mag Cap', 'RoF', 'DPS'],
 					datasets: data
 				},
 				options: {
