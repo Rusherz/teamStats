@@ -13,14 +13,14 @@ let MatchFunctions = {
                 'homeTeam': match['homeTeam'],
                 'awayTeam': match['awayTeam']
             },
-            filters: {}
+            fields: {}
         }, function (data) {
             if (data.length == 0) {
                 db.insertOne({
                     database: season,
                     collection: 'matches',
                     query: {},
-                    filters: {}
+                    fields: {}
                 }, match, function () {
                     callback(true);
                 })
@@ -37,7 +37,7 @@ let MatchFunctions = {
             query: {
                 type: "date"
             },
-            filters: {
+            fields: {
                 _id: 0,
                 __v: 0
             }
@@ -56,7 +56,7 @@ let MatchFunctions = {
             query: {
                 type: "date"
             },
-            filters: {
+            fields: {
                 _id: 0,
                 __v: 0
             }
@@ -65,12 +65,11 @@ let MatchFunctions = {
         })
     },
     'findAllMatches': (season, callback) => {
-        console.log("HERE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
         db.find({
             database: season,
             collection: 'matches',
             query: {},
-            filters: {
+            fields: {
                 _id: 0,
                 __v: 0
             }

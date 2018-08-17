@@ -6,9 +6,9 @@ module.exports = {
     'find': (db_params, callback) => {
         MongoClient.connect(url, function (err, db) {
             if (err) throw err;
-            console.log(db_params['database'])
+			console.log(db_params)
             var dbo = db.db(db_params['database']);
-            dbo.collection(db_params['collection']).find(db_params['query'], db_params['filters']).toArray(function (err, result) {
+            dbo.collection(db_params['collection']).find(db_params['query']).project(db_params['fields']).toArray(function (err, result) {
                 if (err) throw err;
                 db.close();
                 callback(result);
@@ -18,8 +18,8 @@ module.exports = {
     'findOne': (db_params, callback) => {
         MongoClient.connect(url, function (err, db) {
             if (err) throw err;
-            var dbo = db.db(db_params['database']);
-            dbo.collection(db_params['collection']).findOne(db_params['query'], db_params['filters'], function (err, result) {
+			var dbo = db.db(db_params['database']);
+            dbo.collection(db_params['collection']).findOne(db_params['query'], function (err, result) {
                 if (err) throw err;
                 db.close();
                 callback(result);

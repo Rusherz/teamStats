@@ -8,7 +8,7 @@ let TeamFunctions = {
             database: season,
             collection: 'teams',
             query: {},
-            filters: {
+            fields: {
                 team: 1
             }
         }, function (data) {
@@ -22,7 +22,7 @@ let TeamFunctions = {
             query: {
                 "team": teamName
             },
-            filters: {}
+            fields: {}
         }, function (data) {
             if (data.length == 0) {
                 let team = {};
@@ -32,7 +32,7 @@ let TeamFunctions = {
                     database: season,
                     collection: 'teams',
                     query: {},
-                    filters: {}
+                    fields: {}
                 }, team, function (result) {
                     callback();
                 })
@@ -44,7 +44,7 @@ let TeamFunctions = {
             database: season,
             collection: 'teams',
             query: {},
-            filters: {
+            fields: {
                 _id: 0,
                 __v: 0
             }
@@ -59,7 +59,7 @@ let TeamFunctions = {
             query: {
                 "team": teamName
             },
-            filters: {}
+            fields: {}
         }, function (data) {
             callback(data);
         });
@@ -77,7 +77,7 @@ let TeamFunctions = {
                 }
                 ]
             },
-            filters: {
+            fields: {
                 _id: 0,
                 __v: 0
             }
@@ -111,7 +111,7 @@ let TeamFunctions = {
                         query: {
                             'team': mapData['teamName']
                         },
-                        filters: {}
+                        fields: {}
                     }, {
                             $inc: update
                         }, function (data) {
@@ -125,7 +125,7 @@ let TeamFunctions = {
                         database: season,
                         collection: 'teams',
                         query: {},
-                        filters: {}
+                        fields: {}
                     }, team, function (result) {
                         let update = {}
                         update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
@@ -143,7 +143,7 @@ let TeamFunctions = {
                             query: {
                                 'team': mapData['teamName']
                             },
-                            filters: {}
+                            fields: {}
                         }, {
                                 $inc: update
                             }, function (data) {
