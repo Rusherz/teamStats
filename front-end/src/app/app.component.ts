@@ -32,7 +32,7 @@ export class AppComponent {
 		TEAM WIN LOSS OVER TIME
 
 	*/
-	
+	public overTimeChart = undefined;
 
 	/*
 
@@ -67,19 +67,18 @@ export class AppComponent {
 			this.date = new Date(data['date']);
 		})
 		this.http.get(this.url + '/gunNames').subscribe((gunNames: Object[]) => {
-			console.log(gunNames);
 			for (let gunName of gunNames) {
 				this.gunNames.push(gunName['gun'])
 			}
 		})
 		this.http.get(this.url + '/allTeamNames?season=' + this.season).subscribe((teamNames: Object[]) => {
-			console.log(teamNames)
 			for (let teamName of teamNames) {
 				this.teamNames.push(teamName['team'])
 			}
 		});
 		this.teamWinLossChartInit();
 		this.gunStatChartInit();
+		this.overTimeChartInit();
 	}
 
 	getChartData() {
@@ -158,6 +157,34 @@ export class AppComponent {
 		});
 	}
 
+	overTimeChartInit(){
+		this.http.get(this.url + '/overtime').subscribe(data => {
+			console.log(data);
+			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas");
+			let ctx = canvas.getContext("2d");
+			this.overTimeChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: data['labels'],
+					datasets: data['dataPoints']
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					scales: {
+						xAxes: [{
+							display: true
+						}],
+						yAxes: [{
+							display: true
+						}],
+					}
+				}
+			});
+		});
+	}
+
 	gunStatChartInit() {
 		this.http.get(this.url + '/gunstats').subscribe(data => {
 			let canvas = <HTMLCanvasElement>document.getElementById("gunStatCanvas");
@@ -194,7 +221,6 @@ export class AppComponent {
 
 	getGunStats() {
 		this.http.post(this.url + '/gunstats', { gunName: this.gunName }).subscribe(result => {
-			console.log(result);
 			this.gun['damage'] = result['damage'];
 			this.gun['magSize'] = result['magSize'];
 			this.gun['points'] = result['points'];

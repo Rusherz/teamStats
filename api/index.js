@@ -6,6 +6,7 @@ let express = require('express');
 let path = require('path')
 let app = express();
 let configRoute = require('./routes/config')
+let overTimeRoute = require('./routes/overTime')
 let bodyParser = require("body-parser");
 let request = require('request');
 let cheerio = require('cheerio');
@@ -37,6 +38,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/config', configRoute);
+
+app.use('/overtime', overTimeRoute);
 
 app.get('/getLastUpdated', (req, res) => {
 	MatchFunctions.getLastUpdated(req.query['season'], function (data) {
@@ -231,6 +234,33 @@ app.post('/updategunstats', (req, res) => {
 		res.json(result);
 	})
 })
+
+app.get('/randomroute', (req, res) => {
+    db.findOne({
+        database: 'season_5_2018',
+        collection: 'matches',
+        query: {
+            'homeTeam': 'Stone Cold Killers'
+        },
+        fields: {}
+    },function(result){
+        res.json(result);
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(4000, (err) => {
 	if (err) console.error(err)
