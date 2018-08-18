@@ -29,6 +29,13 @@ export class AppComponent {
 
 	/*
 
+		TEAM WIN LOSS OVER TIME
+
+	*/
+	
+
+	/*
+
 		GUN STAT VARIABLES
 
 	*/
