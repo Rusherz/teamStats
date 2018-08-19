@@ -1,13 +1,13 @@
 let router = require('express').Router();
 let db = require('../config/db');
 
-router.get('/', (req, res) => {
-    //let team = req.query.teamName;
-    let team = 'Stone Cold Killers';
-    //let map = req.query.mapName;
-    let map = 'Bazaar';
+router.post('/', (req, res) => {
+    let team = req.body.teamName;
+    let map = req.body.mapName;
+    let season = req.body.season;
+    console.log(req.body)
     let db_params = {
-        database: 'season_5_2018',
+        database: season,
         collection: 'matches',
         query: {
             '$and': [{
@@ -34,6 +34,9 @@ router.get('/', (req, res) => {
             }
             ]
         },
+        sort:{
+            date: 1
+        },
         filters: {}
     }
     db.find(db_params, function (matches) {
@@ -52,7 +55,7 @@ router.get('/', (req, res) => {
         let labels = []
         let count = 0;
         for (let match of matches) {
-            labels.push(match['date'])
+            labels.push(new Date(match['date']))
             let win = 'scoreHome';
             let loss = 'scoreAway';
             if (match['awayTeam'] == team) {
@@ -65,6 +68,7 @@ router.get('/', (req, res) => {
             dataPoints[0]['data'].push(match['map' + mapNumber][win])
             dataPoints[1]['data'].push(match['map' + mapNumber][loss])
             if (count == matches.length - 1) {
+                console.log(dataPoints, labels)
                 res.json({dataPoints: dataPoints, labels: labels});
             } else {
                 count++;

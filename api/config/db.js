@@ -8,7 +8,7 @@ module.exports = {
             if (err) throw err;
 			console.log(db_params)
             var dbo = db.db(db_params['database']);
-            dbo.collection(db_params['collection']).find(db_params['query']).project(db_params['fields']).toArray(function (err, result) {
+            dbo.collection(db_params['collection']).find(db_params['query']).sort(db_params['sort']).project(db_params['fields']).toArray(function (err, result) {
                 if (err) throw err;
                 db.close();
                 callback(result);

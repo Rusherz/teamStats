@@ -164,6 +164,7 @@ app.get('/gunstats', (req, res) => {
 		database: 'gunStats',
 		collection: 'gunStats',
 		query: {},
+		sort: {},
 		fields: {}
 	}
 	db.find(db_params, function (guns) {
@@ -194,6 +195,7 @@ app.post('/gunstats', (req, res) => {
 		query: {
 			'gun': req.body['gunName']
 		},
+		sort: {},
 		fields: {}
 	}
 	db.findOne(db_params, function (result) {
@@ -223,6 +225,7 @@ app.post('/updategunstats', (req, res) => {
 		query: {
 			'gun': req.body['gunName']
 		},
+		sort: {},
 		fields: {}
 	}
 	db.updateOne(db_params, {$set: { 
