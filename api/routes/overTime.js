@@ -5,7 +5,6 @@ router.post('/', (req, res) => {
     let team = req.body.teamName;
     let map = req.body.mapName;
     let season = req.body.season;
-    console.log(req.body)
     let db_params = {
         database: season,
         collection: 'matches',
@@ -55,13 +54,18 @@ router.post('/', (req, res) => {
         let labels = []
         let count = 0;
         for (let match of matches) {
-            labels.push(new Date(match['date']))
             let win = 'scoreHome';
             let loss = 'scoreAway';
+            let otherTeam = 'awayTeam';
             if (match['awayTeam'] == team) {
                 win = 'scoreAway';
                 loss = 'scoreHome'
+                otherTeam = 'homeTeam';
             }
+            labels.push({
+                date: match['date'],
+                team: match[otherTeam]
+            })
             let mapNumber = 1
             if (match['map2']['mapName'] == map) mapNumber = 2;
             if (match['map3']['mapName'] == map) mapNumber = 3;
