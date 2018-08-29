@@ -1,136 +1,18 @@
 <div id="container" class="container row">
-  <ul class="tabs">
-    <li class="tab col s4">
-      <a (click)="isWinLoss = true">Teams</a>
-    </li>
-    <li class="tab col s4">
-      <a (click)="isWinLoss = false">Guns</a>
-    </li>
-  </ul>
+	<ul class="tabs row">
+		<li class="tab col s12 m3">
+			<a (click)="showChart = 0">Teams Win Loss</a>
+		</li>
+		<li class="tab col s12 m3">
+			<a (click)="showChart = 1">Win Loss Over Time</a>
+		</li>
+		<li class="tab col s12 m3">
+			<a (click)="showChart = 2">Guns</a>
+		</li>
+	</ul>
 
-  <!-- 
-
-			GUN STAT STUFF
-
-	 -->
-  <div class="col s12" [hidden]="isWinLoss">
-    <div class="col s12 m4" style="margin-top: 1rem">
-      <div class="col s12 input-field">
-        <select [(ngModel)]="gunName" (change)="getGunStats()" name="teamTwo" style="display: block; margin-top: 0.5rem">
-          <option selected [value]=undefined>Select a Gun to Edit</option>
-          <option *ngFor="let gunName of gunNames" [ngValue]="gunName">{{gunName}}</option>
-        </select>
-        <div class="col s12">
-          <label>Damage</label>
-          <input name="damage" type="number" [(ngModel)]="gun.damage" />
-        </div>
-        <div class="col s12">
-          <label>Mag Size</label>
-          <input name="magSize" type="number" [(ngModel)]="gun.magSize" />
-        </div>
-        <div class="col s12">
-          <label>Points</label>
-          <input name="points" type="number" [(ngModel)]="gun.points" />
-        </div>
-        <div class="col s12">
-          <label>Rate Of Fire</label>
-          <input name="rof" type="number" [(ngModel)]="gun.rof" />
-        </div>
-        <div class="col s12">
-          <button class="btn" (click)="updateGunStats()" style="width: 100%">Update Gun</button>
-        </div>
-      </div>
-    </div>
-    <!--
-		
-				GUN STAT CHART
-		
-			-->
-    <h3>Gun Stats</h3>
-    <div class="col s12 m8">
-      <div id="gunStatChartContainer" style="height: 300px; width: 100%; display: inline-block; margin-bottom: 2rem">
-        <canvas id="gunStatCanvas">{{ gunStatChart }}</canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- 
-
-			TEAM WIN LOSS STUFF
-
-	 -->
-  <div class="col s12" [hidden]="!isWinLoss">
-    <div class="col s12 m4" style="margin-top: 1rem;">
-      <div class="col s12 input-field">
-        <div class="col s12">
-          <button class="btn" style="width: 100%" (click)="getChartData()">Refresh Chart</button>
-        </div>
-        <div class="col s12" style="margin-top: 1rem;">
-          <button class="btn" style="width: 100%" (click)="updateData()">Grab new matches</button>
-          <p>Last grabbed on {{ date | date:'medium' }}</p>
-        </div>
-      </div>
-      <div class="col s12 input-field">
-        <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-          <option selected value="season_5_2018">Season 5 - 2018</option>
-        </select>
-        <select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
-          <option selected [value]=undefined>Select a Team</option>
-          <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-        </select>
-        <select [(ngModel)]="teamTwo" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
-          <option selected [value]=undefined>Select a Team</option>
-          <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-        </select>
-        <select [(ngModel)]="roundsMaps" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
-          <option selected value="rounds">Rounds Won</option>
-          <option value="maps">Maps Won</option>
-        </select>
-      </div>
-      <div class="col s12 input-field">
-        <div class="col s12">
-          <input name="season_url" type="text" [(ngModel)]="season_url" />
-        </div>
-        <div class="col s12">
-          <button class="btn" style="width: 100%" [disabled]="season_url == undefined || data_loading" (click)="getOlderData()">{{ data_string }}</button>
-        </div>
-      </div>
-    </div>
-    <!--
-
-		TEAM WIN LOSS CHART
-
-	-->
-    <h3>Team Win Loss</h3>
-    <div class="col s12 m8">
-      <div id="teamWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
-        <canvas id="teamWinLossCanvas">{{ teamWinLossChart }}</canvas>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="col s12" [hidden]="!isWinLoss && !overTime">
-    <div class="col s12 input-field">
-      <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-        <option selected value="season_5_2018">Season 5 - 2018</option>
-      </select>
-      <select [(ngModel)]="teamOverTime" (change)="getChartData()" name="teamOverTime" style="display: block; margin-top: 0.5rem">
-        <option selected [value]=undefined>Select a Team</option>
-        <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-      </select>
-      <select [(ngModel)]="map" name="map" style="display: block; margin-top: 0.5rem">
-			<option selected [value]="Bazaar">Bazaar</option>
-			<option selected [value]="Cargo">Cargo</option>
-			<option selected [value]="Downfall">Downfall</option>
-			<option selected [value]="Quarentine">Quarentine</option>
-			<option selected [value]="Suburbia">Suburbia</option>
-			<option selected [value]="Subway">Subway</option>
-			<option selected [value]="Tanker">Tanker</option>
-      </select>
-    </div>
-  </div>
-
-
+	<winLossChart [url]="url" [teamNames]="teamNames" *ngIf="showChart == 0"></winLossChart>
+	<overTimeChart [url]="url" [teamNames]="teamNames" *ngIf="showChart == 1"></overTimeChart>
+	<gunStatChart [url]="url" *ngIf="showChart == 2"></gunStatChart>
 
 </div>

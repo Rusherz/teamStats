@@ -10,6 +10,9 @@ let TeamFunctions = {
             query: {},
             fields: {
                 team: 1
+            },
+            sort: {
+                team: 1
             }
         }, function (data) {
             callback(data);
@@ -87,71 +90,28 @@ let TeamFunctions = {
     },
     'updateOneMap': (season, mapData, callback) => {
         if (mapData['map'] != 'other') {
-            db.findOne({
+            let update = {}
+            update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
+            update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
+            if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
+                update[mapData['map'] + '.maps.win'] = 1;
+                update[mapData['map'] + '.maps.loss'] = 0;
+            } else {
+                update[mapData['map'] + '.maps.win'] = 0;
+                update[mapData['map'] + '.maps.loss'] = 1;
+            }
+            db.updateOne({
                 database: season,
                 collection: 'teams',
                 query: {
                     'team': mapData['teamName']
-                }
-            }, function (data) {
-                if (data) {
-                    let update = {}
-                    update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
-                    update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
-                    if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
-                        update[mapData['map'] + '.maps.win'] = 1;
-                        update[mapData['map'] + '.maps.loss'] = 0;
-                    } else {
-                        update[mapData['map'] + '.maps.win'] = 0;
-                        update[mapData['map'] + '.maps.loss'] = 1;
-                    }
-                    db.updateOne({
-                        database: season,
-                        collection: 'teams',
-                        query: {
-                            'team': mapData['teamName']
-                        },
-                        fields: {}
-                    }, {
-                            $inc: update
-                        }, function (data) {
-                            callback();
-                        })
-                } else {
-                    let team = {};
-                    Object.assign(team, Team);
-                    team['team'] = mapData['teamName'];
-                    db.insertOne({
-                        database: season,
-                        collection: 'teams',
-                        query: {},
-                        fields: {}
-                    }, team, function (result) {
-                        let update = {}
-                        update[mapData['map'] + '.rounds.win'] = mapData['roundsWon'];
-                        update[mapData['map'] + '.rounds.loss'] = mapData['roundsLoss'];
-                        if (parseInt(mapData['roundsWon']) > parseInt(mapData['roundsLoss'])) {
-                            update[mapData['map'] + '.maps.win'] = 1;
-                            update[mapData['map'] + '.maps.loss'] = 0;
-                        } else {
-                            update[mapData['map'] + '.maps.win'] = 0;
-                            update[mapData['map'] + '.maps.loss'] = 1;
-                        }
-                        db.updateOne({
-                            database: season,
-                            collection: 'teams',
-                            query: {
-                                'team': mapData['teamName']
-                            },
-                            fields: {}
-                        }, {
-                                $inc: update
-                            }, function (data) {
-                                callback();
-                            })
-                    })
-                }
-            })
+                },
+                fields: {}
+            }, {
+                    $inc: update
+                }, function (data) {
+                    callback();
+                })
         } else {
             callback();
         }

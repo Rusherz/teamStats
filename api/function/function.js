@@ -22,23 +22,24 @@ module.exports = {
                 let maps = JSON.parse(body.substring(body.indexOf('['), body.indexOf(']') + 1));
                 for (let map_index in maps) {
                     match['map' + (parseInt(map_index) + 1)] = {
-                        mapName: maps[map_index]['Map'],
+                        mapName: maps[map_index]['Map'].toLowerCase().split(" ")[0],
                         scoreHome: maps[map_index]['ScoreHome'],
                         scoreAway: maps[map_index]['ScoreAway']
                     }
                 }
+                match['date'] = new Date(match['date']);
                 MatchFunctions.insertOneMatch(season, match, function (inserted) {
                     if (inserted) {
                         for (let i = 1; i < 4; i++) {
                             let homeTeamMap = {
                                 teamName: match['homeTeam'],
-                                map: match['map' + i]['mapName'].toLowerCase().split(" ")[0],
+                                map: match['map' + i]['mapName'],
                                 roundsWon: match['map' + i]['scoreHome'],
                                 roundsLoss: match['map' + i]['scoreAway']
                             }
                             let awayTeamMap = {
                                 teamName: match['awayTeam'],
-                                map: match['map' + i]['mapName'].toLowerCase().split(" ")[0],
+                                map: match['map' + i]['mapName'],
                                 roundsWon: match['map' + i]['scoreAway'],
                                 roundsLoss: match['map' + i]['scoreHome']
                             }

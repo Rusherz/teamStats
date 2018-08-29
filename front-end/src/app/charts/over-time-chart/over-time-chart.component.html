@@ -1,0 +1,21 @@
+<div class="col s12">
+  <div class="col s12 input-field">
+    <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
+      <option selected value="season_5_2018">Season 5 - 2018</option>
+    </select>
+    <select [(ngModel)]="teamName" (change)="getChartData()" name="teamOverTime" style="display: block; margin-top: 0.5rem">
+      <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+    </select>
+    <select [(ngModel)]="map" (change)="getChartData()" name="map" style="display: block; margin-top: 0.5rem">
+      <option *ngFor="let map of maps" [ngValue]="map">{{map}}</option>
+    </select>
+  </div>
+
+
+  <h3>Team Win Loss Over Time</h3>
+  <div class="col s12 m12">
+    <div id="overTimeChartContainer" style="width: 100%; height: 100%; display: inline-block; margin-bottom: 2rem">
+      <canvas id="overTimeCanvas">{{ overTimeChart }}</canvas>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ let express = require('express');
 let path = require('path')
 let app = express();
 let configRoute = require('./routes/config')
+let overTimeRoute = require('./routes/overTime')
 let bodyParser = require("body-parser");
 let request = require('request');
 let cheerio = require('cheerio');
@@ -37,6 +38,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/config', configRoute);
+
+app.use('/overtime', overTimeRoute);
 
 app.get('/getLastUpdated', (req, res) => {
 	MatchFunctions.getLastUpdated(req.query['season'], function (data) {
@@ -161,6 +164,7 @@ app.get('/gunstats', (req, res) => {
 		database: 'gunStats',
 		collection: 'gunStats',
 		query: {},
+		sort: {},
 		fields: {}
 	}
 	db.find(db_params, function (guns) {
@@ -191,6 +195,7 @@ app.post('/gunstats', (req, res) => {
 		query: {
 			'gun': req.body['gunName']
 		},
+		sort: {},
 		fields: {}
 	}
 	db.findOne(db_params, function (result) {
@@ -220,6 +225,7 @@ app.post('/updategunstats', (req, res) => {
 		query: {
 			'gun': req.body['gunName']
 		},
+		sort: {},
 		fields: {}
 	}
 	db.updateOne(db_params, {
@@ -234,49 +240,32 @@ app.post('/updategunstats', (req, res) => {
 	})
 })
 
-app.get('/apitest', (req, res) => {
-	let token = '3fedf52fce6169559b641dda3192a8e651335e36d22bfabffc85304880d6e932';
-	let calendar_key = 'ksfqektkz2y1vsih3r';
-	let event = {
-		"series_id": null,
-		"remote_id": null,
-		"subcalendar_id": 5430570,
-		"subcalendar_ids": [5430570],
-		"all_day": false,
-		"rrule": "",
-		"title": "Test",
-		"who": "amedeiros@questmindshare.com",
-		"location": "oakville",
-		"notes": "\u003Cp\u003Etest notes\u003C\/p\u003E",
-		"version": "5b7af16fa56ef",
-		"readonly": false,
-		"tz": null,
-		"start_dt": "2018-08-20T07:35:00-04:00",
-		"end_dt": "2018-08-20T07:40:00-04:00",
-		"ristart_dt": null,
-		"rsstart_dt": null,
-		"creation_dt": "2018-08-20T12:50:55-04:00",
-		"update_dt": null,
-		"delete_dt": null,
-		"custom": {}
-	}
-	request.post('https://api.teamup.com/ksfqektkz2y1vsih3r/events',{
-		headers: {
-			'Teamup-Token': token,
-			'Content-type': 'application/json',
-		},
-		json: event
-	}, function(err, requ, body){
-		console.log(err)
-		console.log(requ)
-		console.log(body)
-		if(err){
-			res.send(err)
-		}else{
-			res.send(body)
-		}
-	})
+app.get('/randomroute', (req, res) => {
+    db.findOne({
+        database: 'season_5_2018',
+        collection: 'matches',
+        query: {
+            'homeTeam': 'Stone Cold Killers'
+        },
+        fields: {}
+    },function(result){
+        res.json(result);
+    })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(4000, (err) => {
 	if (err) console.error(err)

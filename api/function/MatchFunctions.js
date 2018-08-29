@@ -1,7 +1,6 @@
 const db = require('../config/db');/* 
 const mongoose = require('mongoose');
 const Match = require('../models/Match'); */
-const date_id = "5b64ba4fe0e7bdff24546a46";
 
 let MatchFunctions = {
     'insertOneMatch': (season, match, callback) => {
@@ -30,7 +29,7 @@ let MatchFunctions = {
         });
     },
     'updateLastDate': (season, callback) => {
-        let date = new Date().toUTCString();
+        let date = new Date(new Date().toUTCString());
         db.updateOne({
             database: season,
             collection: 'matches',
