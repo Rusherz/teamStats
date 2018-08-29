@@ -222,13 +222,59 @@ app.post('/updategunstats', (req, res) => {
 		},
 		fields: {}
 	}
-	db.updateOne(db_params, {$set: { 
-		damage: gun['damage'],
-		magSize: gun['magSize'],
-		points: gun['points'],
-		rof: gun['rof']
-	}}, function(result){
+	db.updateOne(db_params, {
+		$set: {
+			damage: gun['damage'],
+			magSize: gun['magSize'],
+			points: gun['points'],
+			rof: gun['rof']
+		}
+	}, function (result) {
 		res.json(result);
+	})
+})
+
+app.get('/apitest', (req, res) => {
+	let token = '3fedf52fce6169559b641dda3192a8e651335e36d22bfabffc85304880d6e932';
+	let calendar_key = 'ksfqektkz2y1vsih3r';
+	let event = {
+		"series_id": null,
+		"remote_id": null,
+		"subcalendar_id": 5430570,
+		"subcalendar_ids": [5430570],
+		"all_day": false,
+		"rrule": "",
+		"title": "Test",
+		"who": "amedeiros@questmindshare.com",
+		"location": "oakville",
+		"notes": "\u003Cp\u003Etest notes\u003C\/p\u003E",
+		"version": "5b7af16fa56ef",
+		"readonly": false,
+		"tz": null,
+		"start_dt": "2018-08-20T07:35:00-04:00",
+		"end_dt": "2018-08-20T07:40:00-04:00",
+		"ristart_dt": null,
+		"rsstart_dt": null,
+		"creation_dt": "2018-08-20T12:50:55-04:00",
+		"update_dt": null,
+		"delete_dt": null,
+		"custom": {}
+	}
+	request.post('https://api.teamup.com/ksfqektkz2y1vsih3r/events',{
+		headers: {
+			'Teamup-Token': token,
+			'Content-type': 'application/json',
+		},
+		json: event
+	}, function(err, requ, body){
+		console.log(err)
+		console.log(requ)
+		console.log(body)
+		if(err){
+			res.send(err)
+		}else{
+			res.send(body)
+		}
 	})
 })
 
