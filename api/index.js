@@ -240,33 +240,6 @@ app.post('/updategunstats', (req, res) => {
 	})
 })
 
-app.get('/randomroute', (req, res) => {
-    db.findOne({
-        database: 'season_5_2018',
-        collection: 'matches',
-        query: {
-            'homeTeam': 'Stone Cold Killers'
-        },
-        fields: {}
-    },function(result){
-        res.json(result);
-    })
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.listen(4000, (err) => {
 	if (err) console.error(err)
 	console.info("server started on port 4000");

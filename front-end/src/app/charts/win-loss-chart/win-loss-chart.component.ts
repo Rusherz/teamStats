@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 
@@ -25,6 +25,7 @@ export class WinLossChartComponent implements OnInit {
 	public data_loading: boolean = false;
 	public season: string = 'season_5_2018';
 
+	@Output() output_season = new EventEmitter();
 	@Input() url:string;
 	@Input() teamNames: string[] = [];
 	constructor(private http: HttpClient) {}
@@ -37,6 +38,7 @@ export class WinLossChartComponent implements OnInit {
 	}
 
 	getChartData() {
+		this.output_season.emit(this.season);
 		this.TeamNames = [];
 		if (this.teamOne && this.teamOne != 'undefined') {
 			this.TeamNames.push(this.teamOne)

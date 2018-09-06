@@ -16,8 +16,9 @@
 			</div>
 			<div class="col s12 input-field">
 				<select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-					<option selected value="season_5_2018">Season 5 - 2018</option>
-				</select>
+						<option selected value="season_5_2018">Season 5 - 2018</option>
+						<option value="season_6_2018">Season 6 - 2018</option>
+					</select>
 				<select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
 					<option selected [value]=undefined>Select a Team</option>
 					<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>

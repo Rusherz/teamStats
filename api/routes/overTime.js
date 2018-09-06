@@ -72,7 +72,6 @@ router.post('/', (req, res) => {
             dataPoints[0]['data'].push(match['map' + mapNumber][win])
             dataPoints[1]['data'].push(match['map' + mapNumber][loss])
             if (count == matches.length - 1) {
-                console.log(dataPoints, labels)
                 res.json({dataPoints: dataPoints, labels: labels});
             } else {
                 count++;

@@ -11,7 +11,7 @@
 		</li>
 	</ul>
 
-	<winLossChart [url]="url" [teamNames]="teamNames" *ngIf="showChart == 0"></winLossChart>
+	<winLossChart [url]="url" (output_season)="setSeason($event)" [teamNames]="teamNames" *ngIf="showChart == 0"></winLossChart>
 	<overTimeChart [url]="url" [teamNames]="teamNames" *ngIf="showChart == 1"></overTimeChart>
 	<gunStatChart [url]="url" *ngIf="showChart == 2"></gunStatChart>
 

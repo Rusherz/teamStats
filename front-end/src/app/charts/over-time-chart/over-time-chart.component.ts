@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,12 +15,13 @@ export class OverTimeChartComponent implements OnInit {
   
 	  */
 	public overTimeChart = undefined;
-	public season: string = "season_5_2018";
+	public season: string = 'season_5_2018';
 	public maps: string[] = ['Bazaar', 'Cargo', 'Downfall', 'Quarantine', 'Suburbia', 'Subway', 'Tanker']
 	public map: string = undefined;
 	public teamName: string = undefined;
 	public isInited: boolean = false;
 
+	@Output() output_season = new EventEmitter();
 	@Input() teamNames: string[];
 	@Input() url: string;
 
@@ -33,6 +34,7 @@ export class OverTimeChartComponent implements OnInit {
 	}
 
 	getChartData() {
+		this.output_season.emit(this.season);
 		if (this.map != undefined && this.teamName != undefined) {
 			if (this.isInited) {
 				this.http.post(this.url + '/overtime', { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
@@ -53,7 +55,6 @@ export class OverTimeChartComponent implements OnInit {
 
 	overTimeChartInit() {
 		this.http.post(this.url + '/overtime', { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
-			console.log(data);
 			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas");
 			let ctx = canvas.getContext("2d");
 			let labels = [];
