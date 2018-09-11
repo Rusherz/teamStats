@@ -1,6 +1,4 @@
-let db = require('../config/db');
-/* const mongoose = require('mongoose');
-const Team = require('../models/Team'); */
+let db = require('../shared/db');
 
 let TeamFunctions = {
     'getTeamNames': (season, callback) => {

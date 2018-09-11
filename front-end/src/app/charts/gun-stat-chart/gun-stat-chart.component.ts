@@ -29,7 +29,7 @@ export class GunStatChartComponent implements OnInit {
 	constructor(private http: HttpClient) { }
 
 	ngOnInit() {
-		this.http.get(this.url + '/gunNames').subscribe((gunNames: Object[]) => {
+		this.http.get(this.url + '/guns/gunNames').subscribe((gunNames: Object[]) => {
 			for (let gunName of gunNames) {
 				this.gunNames.push(gunName['gun'])
 			}
@@ -38,7 +38,7 @@ export class GunStatChartComponent implements OnInit {
 	}
 
 	gunStatChartInit() {
-		this.http.get(this.url + '/gunstats').subscribe(data => {
+		this.http.get(this.url + '/guns').subscribe(data => {
 			let canvas = <HTMLCanvasElement>document.getElementById("gunStatCanvas");
 			let ctx = canvas.getContext("2d");
 			this.gunStatChart = new Chart(ctx, {
@@ -65,14 +65,14 @@ export class GunStatChartComponent implements OnInit {
 	}
 
 	gunStatUpdate() {
-		this.http.get(this.url + '/gunstats').subscribe(data => {
+		this.http.get(this.url + '/guns').subscribe(data => {
 			this.gunStatChart.data.datasets = data;
 			this.gunStatChart.update()
 		})
 	}
 
 	getGunStats() {
-		this.http.post(this.url + '/gunstats', { gunName: this.gunName }).subscribe(result => {
+		this.http.post(this.url + '/guns', { gunName: this.gunName }).subscribe(result => {
 			this.gun['damage'] = result['damage'];
 			this.gun['magSize'] = result['magSize'];
 			this.gun['points'] = result['points'];
@@ -81,7 +81,7 @@ export class GunStatChartComponent implements OnInit {
 	}
 
 	updateGunStats() {
-		this.http.post(this.url + '/updategunstats', { gunName: this.gunName, gun: this.gun }).subscribe(result => {
+		this.http.patch(this.url + '/guns', { gunName: this.gunName, gun: this.gun }).subscribe(result => {
 			this.gunStatUpdate();
 		});
 	}

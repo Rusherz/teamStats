@@ -1,6 +1,4 @@
-const db = require('../config/db');/* 
-const mongoose = require('mongoose');
-const Match = require('../models/Match'); */
+const db = require('../shared/db');
 
 let MatchFunctions = {
     'insertOneMatch': (season, match, callback) => {

@@ -1,5 +1,5 @@
 let router = require('express').Router();
-let db = require('../config/db');
+let db = require('../shared/db');
 
 router.post('/', (req, res) => {
     let team = req.body.teamName;

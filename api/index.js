@@ -1,15 +1,13 @@
-let func = require('./function/function');
-let MatchFunctions = require('./function/MatchFunctions');
-let TeamFunctions = require('./function/TeamFunctions');
-let db = require('./config/db');
+let WebFunctions = require('./shared/WebFunctions');
+let MatchFunctions = require('./shared/MatchFunctions');
+let TeamFunctions = require('./shared/TeamFunctions');
+let db = require('./shared/db');
 let express = require('express');
-let path = require('path')
 let app = express();
 let configRoute = require('./routes/config')
 let overTimeRoute = require('./routes/overTime')
+let gunRoute = require('./routes/guns');
 let bodyParser = require("body-parser");
-let request = require('request');
-let cheerio = require('cheerio');
 
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -17,18 +15,22 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	// allow preflight
+	if (req.method === 'OPTIONS') {
+		res.send(200);
+	} else {
+		next();
+	}
 });
 
-//app.use(express.static(path.join(__dirname, 'public')));
-
 app.get('/', (req, res) => {
-	let season = req.query['season']
-	func.resetCallbackVariables(function () {
-		func.getMatches(function () {
-			func.getAllMatchInfo(season, function () {
+	let season = req.query['season'];
+	WebFunctions.resetCallbackVariables(function () {
+		WebFunctions.getMatches(function () {
+			WebFunctions.getAllMatchInfo(season, function () {
 				MatchFunctions.updateLastDate(season, function (data) {
 					res.json(data);
 				});
@@ -41,6 +43,8 @@ app.use('/config', configRoute);
 
 app.use('/overtime', overTimeRoute);
 
+app.use('/guns', gunRoute);
+
 app.get('/getLastUpdated', (req, res) => {
 	MatchFunctions.getLastUpdated(req.query['season'], function (data) {
 		res.json(data);
@@ -48,9 +52,9 @@ app.get('/getLastUpdated', (req, res) => {
 });
 
 app.post('/seasonData', (req, res) => {
-	func.resetCallbackVariables(function () {
-		func.getOldTeamMatches(req.body['seasonUrl'], function () {
-			func.getAllMatchInfo(req.body['season'], function () {
+	WebFunctions.resetCallbackVariables(function () {
+		WebFunctions.getOldTeamMatches(req.body['seasonUrl'], function () {
+			WebFunctions.getAllMatchInfo(req.body['season'], function () {
 				res.json({
 					'result': 'done'
 				});
@@ -155,87 +159,6 @@ app.post('/chartwinloss', (req, res) => {
 
 app.get('/allTeamNames', (req, res) => {
 	TeamFunctions.getTeamNames(req.query['season'], function (result) {
-		res.json(result);
-	})
-})
-
-app.get('/gunstats', (req, res) => {
-	db_params = {
-		database: 'gunStats',
-		collection: 'gunStats',
-		query: {},
-		sort: {},
-		fields: {}
-	}
-	db.find(db_params, function (guns) {
-		let dataPoints = [
-
-		]
-		let count = 0;
-		for (let gun of guns) {
-			dataPoints.push({
-				label: gun['gun'],
-				backgroundColor: 'rgb(' + Math.random() * 256 + ', ' + Math.random() * 256 + ', ' + Math.random() * 256 + ' )',
-				fill: true,
-				data: [gun['points'], gun['damage'], gun['rof'] / 100, (gun['rof'] / 60 * gun['damage'])]
-			})
-			if (count == guns.length - 1) {
-				res.json(dataPoints);
-			} else {
-				count++;
-			}
-		}
-	})
-})
-
-app.post('/gunstats', (req, res) => {
-	db_params = {
-		database: 'gunStats',
-		collection: 'gunStats',
-		query: {
-			'gun': req.body['gunName']
-		},
-		sort: {},
-		fields: {}
-	}
-	db.findOne(db_params, function (result) {
-		res.json(result);
-	})
-})
-
-app.get('/gunNames', (req, res) => {
-	db.find({
-		database: 'gunStats',
-		collection: 'gunStats',
-		query: {},
-		fields: {
-			'_id': false,
-			'gun': true
-		}
-	}, function (data) {
-		res.json(data);
-	})
-})
-
-app.post('/updategunstats', (req, res) => {
-	let gun = req.body['gun']
-	db_params = {
-		database: 'gunStats',
-		collection: 'gunStats',
-		query: {
-			'gun': req.body['gunName']
-		},
-		sort: {},
-		fields: {}
-	}
-	db.updateOne(db_params, {
-		$set: {
-			damage: gun['damage'],
-			magSize: gun['magSize'],
-			points: gun['points'],
-			rof: gun['rof']
-		}
-	}, function (result) {
 		res.json(result);
 	})
 })

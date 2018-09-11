@@ -1,6 +1,6 @@
 let router = require('express').Router();
-let MatchFunctions = require('../function/MatchFunctions');
-let TeamFunctions = require('../function/TeamFunctions');
+let MatchFunctions = require('../shared/MatchFunctions');
+let TeamFunctions = require('../shared/TeamFunctions');
 let request = require('request');
 let cheerio = require('cheerio');
 /*
