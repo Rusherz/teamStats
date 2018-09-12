@@ -1,7 +1,6 @@
 let WebFunctions = require('./shared/WebFunctions');
 let MatchFunctions = require('./shared/MatchFunctions');
 let TeamFunctions = require('./shared/TeamFunctions');
-let db = require('./shared/db');
 let express = require('express');
 let app = express();
 let configRoute = require('./routes/config')
@@ -162,6 +161,21 @@ app.get('/allTeamNames', (req, res) => {
 		res.json(result);
 	})
 })
+
+app.get('/getallmaps', (req, res) => {
+	db_params = {
+		database: 'season_5_2018',
+		fields: {
+			_id: 0,
+			map1: 1,
+			map2: 1,
+			map3: 1
+		}
+	}
+	MatchFunctions.findAllMatches(db_params).then(results => {
+		res.json(results);
+	});
+});
 
 app.listen(4000, (err) => {
 	if (err) console.error(err)

@@ -39,12 +39,12 @@ let MatchFunctions = {
                 __v: 0
             }
         }, {
-                $set: {
-                    date: date
-                }
-            }, function (data) {
-                callback(date);
-            })
+            $set: {
+                date: date
+            }
+        }, function (data) {
+            callback(date);
+        })
     },
     'getLastUpdated': (season, callback) => {
         db.findOne({
@@ -61,17 +61,16 @@ let MatchFunctions = {
             callback(data);
         })
     },
-    'findAllMatches': (season, callback) => {
-        db.find({
-            database: season,
-            collection: 'matches',
-            query: {},
-            fields: {
-                _id: 0,
-                __v: 0
-            }
-        }, function (data) {
-            callback(data);
+    'findAllMatches': (db_params, callback) => {
+        return new Promise((resolve, reject) => {
+            db.find({
+                database: db_params['database'],
+                collection: 'matches',
+                query: {},
+                fields: db_params['fields']
+            }, function (data) {
+                resolve(data);
+            })
         })
     },
     'fineOneTeamMatches': (teamName, callback) => {
@@ -88,20 +87,20 @@ let MatchFunctions = {
     'findOneMatch': (teamA, teamB, callback) => {
         db.find('matches', 'matches', {
             $or: [{
-                'homeTeam': teamA,
-                'awayTeam': teamB
-            },
-            {
-                'homeTeam': teamB,
-                'awayTeam': teamA
-            }
+                    'homeTeam': teamA,
+                    'awayTeam': teamB
+                },
+                {
+                    'homeTeam': teamB,
+                    'awayTeam': teamA
+                }
             ]
         }, {
-                _id: 0,
-                __v: 0
-            }, function (data) {
-                callback(data);
-            });
+            _id: 0,
+            __v: 0
+        }, function (data) {
+            callback(data);
+        });
     }
 }
 
