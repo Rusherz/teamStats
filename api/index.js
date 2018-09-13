@@ -3,10 +3,17 @@ let MatchFunctions = require('./shared/MatchFunctions');
 let TeamFunctions = require('./shared/TeamFunctions');
 let express = require('express');
 let app = express();
+let bodyParser = require("body-parser");
+let db = require('./shared/db');
+/*
+
+	Routes
+
+*/
 let configRoute = require('./routes/config')
 let overTimeRoute = require('./routes/overTime')
 let gunRoute = require('./routes/guns');
-let bodyParser = require("body-parser");
+let homeAway = require('./routes/homeAway');
 
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -43,6 +50,8 @@ app.use('/config', configRoute);
 app.use('/overtime', overTimeRoute);
 
 app.use('/guns', gunRoute);
+
+app.use('/homeaway', homeAway);
 
 app.get('/getLastUpdated', (req, res) => {
 	MatchFunctions.getLastUpdated(req.query['season'], function (data) {
@@ -160,15 +169,6 @@ app.get('/allTeamNames', (req, res) => {
 	TeamFunctions.getTeamNames(req.query['season'], function (result) {
 		res.json(result);
 	})
-})
-
-app.get('/getallmaps', (req, res) => {
-	MatchFunctions.findAllMatches('season_5_2018').then(results => {
-		for(let match of resulects){
-			
-		}
-		res.json(results);
-	});
 });
 
 app.listen(4000, (err) => {

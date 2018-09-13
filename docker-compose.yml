@@ -16,7 +16,7 @@ services:
       - ./front-end:/usr/src/app
     build: ./front-end
     ports:
-      - "80:4200"
+      - "81:4200"
     command: ng serve --host 0.0.0.0
   web_mongo:
     container_name: mongo

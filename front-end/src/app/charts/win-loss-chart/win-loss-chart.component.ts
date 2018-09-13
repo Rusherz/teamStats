@@ -16,6 +16,7 @@ export class WinLossChartComponent implements OnInit {
 	*/
 	public roundWinLossChart = undefined;
 	public mapWinLossChart = undefined;
+	public homeAwayChart = undefined;
 	public TeamNames: string[] = [];
 	public teamOne: string = undefined;
 	public teamTwo: string = undefined;
@@ -36,6 +37,7 @@ export class WinLossChartComponent implements OnInit {
 		})
 		this.roundWinLossChartInit();
 		this.mapWinLossChartInit();
+		this.homeAwayChartInit();
 	}
 
 	getChartData() {
@@ -75,6 +77,11 @@ export class WinLossChartComponent implements OnInit {
 				this.mapWinLossChart.options.legend.display = false;
 			}
 			this.mapWinLossChart.update();
+		});
+
+		this.http.post(this.url + '/homeaway', {'season': this.season}).subscribe(data => {
+			this.homeAwayChart.data.datasets = data;
+			this.homeAwayChart.update();
 		});
 	}
 
@@ -143,6 +150,33 @@ export class WinLossChartComponent implements OnInit {
 				options: {
 					legend: {
 						display: false
+					},
+					scales: {
+						xAxes: [{
+							display: true
+						}],
+						yAxes: [{
+							display: true
+						}],
+					}
+				}
+			});
+		});
+	}
+
+	homeAwayChartInit(){
+		this.http.post(this.url + '/homeaway', {'season': this.season}).subscribe(data => {
+			let canvas = <HTMLCanvasElement>document.getElementById("homeAwayCanvas");
+			let ctx = canvas.getContext("2d");
+			this.homeAwayChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: ['Bazaar', 'Cargo', 'Downfall', 'Q1', 'Suburbia', 'Subway', 'Tanker'],
+					datasets: data
+				},
+				options: {
+					legend: {
+						display: true
 					},
 					scales: {
 						xAxes: [{
