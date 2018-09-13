@@ -163,16 +163,10 @@ app.get('/allTeamNames', (req, res) => {
 })
 
 app.get('/getallmaps', (req, res) => {
-	db_params = {
-		database: 'season_5_2018',
-		fields: {
-			_id: 0,
-			map1: 1,
-			map2: 1,
-			map3: 1
+	MatchFunctions.findAllMatches('season_5_2018').then(results => {
+		for(let match of resulects){
+			
 		}
-	}
-	MatchFunctions.findAllMatches(db_params).then(results => {
 		res.json(results);
 	});
 });

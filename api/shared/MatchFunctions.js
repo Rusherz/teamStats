@@ -61,14 +61,24 @@ let MatchFunctions = {
             callback(data);
         })
     },
-    'findAllMatches': (db_params, callback) => {
+    'findAllMatches': (season) => {
         return new Promise((resolve, reject) => {
-            db.find({
-                database: db_params['database'],
+            let db_params = {
+                database: season,
                 collection: 'matches',
-                query: {},
-                fields: db_params['fields']
-            }, function (data) {
+                query: {
+                    homeTeam: {
+                        '$exists': true
+                    }
+                },
+                fields: {
+                    _id: 0,
+                    map1: 1,
+                    map2: 1,
+                    map3: 1
+                }
+            }
+            db.find(db_params, function (data) {
                 resolve(data);
             })
         })
