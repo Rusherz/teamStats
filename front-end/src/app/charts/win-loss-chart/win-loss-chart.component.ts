@@ -21,9 +21,6 @@ export class WinLossChartComponent implements OnInit {
 	public teamOne: string = undefined;
 	public teamTwo: string = undefined;
 	public date: Date;
-	public season_url: string = undefined;
-	public data_string: string = 'Get Older Data';
-	public data_loading: boolean = false;
 	public season: string = 'season_5_2018';
 
 	@Output() output_season = new EventEmitter();
@@ -51,11 +48,6 @@ export class WinLossChartComponent implements OnInit {
 		}
 		this.http.post(this.url + '/chartwinloss', { 'season': this.season, 'teamNames': this.TeamNames, 'roundsMaps': 'rounds' }).subscribe(data => {
 			this.roundWinLossChart.data.datasets = data;
-			if (this.data_loading) {
-				this.data_loading = false;
-				this.data_string = 'Get Older Data';
-				this.season_url = undefined;
-			}
 			if (this.TeamNames.length != 0) {
 				this.roundWinLossChart.options.legend.display = true;
 			} else {
@@ -66,11 +58,6 @@ export class WinLossChartComponent implements OnInit {
 
 		this.http.post(this.url + '/chartwinloss', { 'season': this.season, 'teamNames': this.TeamNames, 'roundsMaps': 'maps' }).subscribe(data => {
 			this.mapWinLossChart.data.datasets = data;
-			if (this.data_loading) {
-				this.data_loading = false;
-				this.data_string = 'Get Older Data';
-				this.season_url = undefined;
-			}
 			if (this.TeamNames.length != 0) {
 				this.mapWinLossChart.options.legend.display = true;
 			} else {
@@ -90,24 +77,6 @@ export class WinLossChartComponent implements OnInit {
 			this.date = new Date(data);
 			this.getChartData();
 		});
-	}
-
-	getOlderData() {
-		this.data_loading = true;
-		this.data_string = 'Loading...';
-		this.http.post(this.url + '/seasonData', {
-			'season': this.season,
-			seasonUrl: this.season_url
-		}).subscribe(data => {
-			if (data['result'] == 'done') {
-				if (this.data_loading) {
-					this.data_loading = false;
-					this.data_string = 'Get Older Data';
-					this.season_url = undefined;
-				}
-				//this.updateData();
-			}
-		})
 	}
 
 	roundWinLossChartInit() {
