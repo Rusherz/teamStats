@@ -1,0 +1,127 @@
+<div class="col s12" *ngIf="matches != undefined">
+
+  <select [(ngModel)]="editIndex" (change)="selectMatch()" name="match" style="display: block; margin-top: 0.5rem">
+    <option selected value="-1">Select a match</option>
+    <option *ngFor="let match of matches; let m = index;" value={{m}}>
+      {{ match['date'] | date:'MM/dd/yyyy'}} {{ match['homeTeam']}} vs {{ match['awayTeam'] }}
+    </option>
+  </select>
+  
+  {{ match | json}}
+
+  <div class="col s12" *ngIf="match != undefined">
+
+    <div class="col s12 l6">
+      <div class="col s12">
+        <div class="col s12" style="text-align: center">
+          <p style="font-size: 24px">
+            {{match['homeTeam']}}
+          </p>
+        </div>
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map1']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="homeMarsoc1">Marsoc Wins</label>
+            <input type="number" name="homeMarsoc1" [(ngModel)]="match['map1']['homeTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="homeVolk1">Volk Wins</label>
+            <input type="number" name="homeVolk1" [(ngModel)]="match['map1']['homeTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map2']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="homeMarsoc2">Marsoc Wins</label>
+            <input type="number" name="homeMarsoc2" [(ngModel)]="match['map2']['homeTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="homeVolk2">Volk Wins</label>
+            <input type="number" name="homeVolk2" [(ngModel)]="match['map2']['homeTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map3']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="homeMarsoc3">Marsoc Wins</label>
+            <input type="number" name="homeMarsoc3" [(ngModel)]="match['map3']['homeTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="homeVolk3">Volk Wins</label>
+            <input type="number" name="homeVolk3" [(ngModel)]="match['map3']['homeTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12 l6">
+      <div class="col s12">
+        <div class="col s12" style="text-align: center">
+          <p style="font-size: 24px">
+            {{match['awayTeam']}}
+          </p>
+        </div>
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map1']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="awayMarsoc1">Marsoc Wins</label>
+            <input type="number" name="awayMarsoc1" [(ngModel)]="match['map1']['awayTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="awayVolk1">Volk Wins</label>
+            <input type="number" name="awayVolk1" [(ngModel)]="match['map1']['awayTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map2']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="awayMarsoc2">Marsoc Wins</label>
+            <input type="number" name="awayMarsoc2" [(ngModel)]="match['map2']['awayTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="awayVolk2">Volk Wins</label>
+            <input type="number" name="awayVolk2" [(ngModel)]="match['map2']['awayTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+
+
+        <div class="col s12">
+          <p>{{ titleCaseWord(match['map3']['mapName']) }}</p>
+          <div class="col s12 m6">
+            <label for="awayMarsoc3">Marsoc Wins</label>
+            <input type="number" name="awayMarsoc3" [(ngModel)]="match['map3']['awayTeam']['marsocWins']" min="0" max="5"
+              required />
+          </div>
+          <div class="col s12 m6">
+            <label for="awayVolk3">Volk Wins</label>
+            <input type="number" name="awayVolk3" [(ngModel)]="match['map3']['awayTeam']['volkWins']" min="0" max="5"
+              required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12" style="text-align: center; margin-top: 1rem;">
+      <button class="common positive-primary" (click)="onSaveMatch()">Edit Match</button>
+    </div>
+  </div>
+
+</div>

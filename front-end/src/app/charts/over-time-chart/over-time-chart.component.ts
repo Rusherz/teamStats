@@ -15,11 +15,10 @@ export class OverTimeChartComponent implements OnInit {
   
 	  */
 	public overTimeChart = undefined;
-	public season: string = 'season_5_2018';
+	public season: string = 'Season 5 2018';
 	public maps: string[] = ['Bazaar', 'Cargo', 'Downfall', 'Quarantine', 'Suburbia', 'Subway', 'Tanker']
 	public map: string = undefined;
 	public teamName: string = undefined;
-	public isInited: boolean = false;
 
 	@Output() output_season = new EventEmitter();
 	@Input() teamNames: string[];
@@ -28,33 +27,29 @@ export class OverTimeChartComponent implements OnInit {
 	constructor(private http: HttpClient) { }
 
 	ngOnInit() {
+		this.url += '/charts/overtime';
 		this.teamName = this.teamNames[0];
 		this.map = this.maps[0];
-		this.getChartData();
+		this.overTimeChartInit();
 	}
 
 	getChartData() {
 		this.output_season.emit(this.season);
 		if (this.map != undefined && this.teamName != undefined) {
-			if (this.isInited) {
-				this.http.post(this.url + '/overtime', { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
-					this.overTimeChart.data.datasets = data['dataPoints'];
-					let labels = [];
-					for (let label of data['labels']) {
-						labels.push(new Date(label['date']).toDateString() + ' ' + label['team'])
-					}
-					this.overTimeChart.data.labels = labels;
-					this.overTimeChart.update();
-				});
-			} else {
-				this.isInited = true;
-				this.overTimeChartInit();
-			}
+			this.http.post(this.url, { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
+				this.overTimeChart.data.datasets = data['dataPoints'];
+				let labels = [];
+				for (let label of data['labels']) {
+					labels.push(new Date(label['date']).toDateString() + ' ' + label['team'])
+				}
+				this.overTimeChart.data.labels = labels;
+				this.overTimeChart.update();
+			});
 		}
 	}
 
 	overTimeChartInit() {
-		this.http.post(this.url + '/overtime', { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
+		this.http.post(this.url, { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe((data) => {
 			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas");
 			let ctx = canvas.getContext("2d");
 			let labels = [];

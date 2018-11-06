@@ -1,0 +1,12 @@
+:root{
+	font-size: 16px;
+}
+
+input{
+	text-align: center;
+}
+
+label{
+	display: block;
+	text-align: center;
+}

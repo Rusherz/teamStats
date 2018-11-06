@@ -1,12 +1,12 @@
 :root {
     --background: #ffffff;
-    --primary-color: #f67f51;
-    --primary-color-light: #f8a281;
-    --positive: #3cbd70;
+    --primary-color: #5193f6;
+    --primary-color-light: #8eb4ee;
+    --positive: #00c521;
     --negative: #d31a48;
     --font-color: black;
     --input-disabled-color: grey;
-    --font-color-fade: grey;
+	--font-color-fade: grey;
   }
   
   /*

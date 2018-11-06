@@ -3,17 +3,13 @@
     <div class="col s12 input-field">
       <div class="col s12">
         <button class="common positive-primary" style="width: 100%" (click)="getChartData()">Refresh Chart</button>
-      </div>
-      <div class="col s12" style="margin-top: 1rem;">
-        <button class="common positive-primary" style="width: 100%" (click)="updateData()" [disabled]="season == 'season_5_2018'">Grab new
-          matches</button>
-        <p>Last grabbed on {{ date | date:'medium' }}</p>
+        <button class="common positive-primary" style="width: 100%" (click)="getMatches()">Get Matches</button>
       </div>
     </div>
     <div class="col s12 input-field">
       <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-        <option selected value="season_5_2018">Season 5 - 2018</option>
-        <option value="season_6_2018">Season 6 - 2018</option>
+        <option selected value="Season 5 2018">Season 5 - 2018</option>
+        <option value="Season 6 2018">Season 6 - 2018</option>
       </select>
       <select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
         <option selected [value]=undefined>Select a Team</option>
@@ -42,15 +38,6 @@
       <div id="mapWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
         <canvas id="mapWinLossCanvas">{{ mapsWinLossChart }}</canvas>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="col s12">
-  <h4 style="width: 100%; text-align:center">Home vs Away Wins</h4>
-  <div class="col s12">
-    <div id="homeAwayChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
-      <canvas id="homeAwayCanvas">{{ homeAwayChart }}</canvas>
     </div>
   </div>
 </div>

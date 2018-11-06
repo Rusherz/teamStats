@@ -7,12 +7,15 @@
 			<a (click)="showChart = 1">Win Loss Over Time</a>
 		</li>
 		<li class="tab col s12 m3">
-			<a (click)="showChart = 2">Guns</a>
+			<a (click)="showChart = 2">Marsoc vs Volk</a>
+		</li>
+		<li class="tab col s12 m3">
+			<a (click)="showChart = 3">Edit Match</a>
 		</li>
 	</ul>
 
 	<winLossChart [url]="url" (output_season)="setSeason($event)" [teamNames]="teamNames" *ngIf="showChart == 0"></winLossChart>
 	<overTimeChart [url]="url" [teamNames]="teamNames" *ngIf="showChart == 1"></overTimeChart>
-	<gunStatChart [url]="url" *ngIf="showChart == 2"></gunStatChart>
-
+	<sideWinChart [url]="url" *ngIf="showChart == 2"></sideWinChart>
+	<editMatch [url]="url" *ngIf="showChart == 3"></editMatch>
 </div>
