@@ -1,3 +1,4 @@
+"use strict"
 const router = require("express").Router();
 
 const WebFunctions = require('../shared/WebFunctions');
@@ -38,19 +39,22 @@ router.route('/').get((req, res) => {
 			}
 			MatchFunctions.findAllMatches(query).then(matches => {
 				let maps = [];
-				for (let index in matches) {
+				for (let match of matches) {
+					if([match['map2']['mapName'], match['map3']['mapName']].indexOf(match['map1']['mapName']) != -1 ||
+					[match['map1']['mapName'], match['map3']['mapName']].indexOf(match['map2']['mapName']) != -1 ||
+					[match['map1']['mapName'], match['map2']['mapName']].indexOf(match['map3']['mapName']) != -1) continue;
 					for (let i = 1; i < 4; i++) {
 						maps.push({
-							teamName: matches[index]['homeTeam'],
-							map: matches[index]['map' + i]['mapName'],
-							roundsWon: matches[index]['map' + i]['scoreHome'],
-							roundsLoss: matches[index]['map' + i]['scoreAway']
+							teamName: match['homeTeam'],
+							map: match['map' + i]['mapName'],
+							roundsWon: match['map' + i]['scoreHome'],
+							roundsLoss: match['map' + i]['scoreAway']
 						});
 						maps.push({
-							teamName: matches[index]['awayTeam'],
-							map: matches[index]['map' + i]['mapName'],
-							roundsWon: matches[index]['map' + i]['scoreAway'],
-							roundsLoss: matches[index]['map' + i]['scoreHome']
+							teamName: match['awayTeam'],
+							map: match['map' + i]['mapName'],
+							roundsWon: match['map' + i]['scoreAway'],
+							roundsLoss: match['map' + i]['scoreHome']
 						});
 					}
 				}

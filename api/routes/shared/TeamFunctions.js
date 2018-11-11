@@ -1,3 +1,4 @@
+"use strict"
 //Team Model
 const Team = require("../../models/Team");
 
@@ -163,7 +164,7 @@ let TeamFunctions = {
 							update[mapData['map'] + '.maps.win'] = 0;
 							update[mapData['map'] + '.maps.loss'] = 1;
 						}
-						team.updateOne({
+						team.update({
 							$inc: update
 						}, function (err, team) {
 							if (err) {

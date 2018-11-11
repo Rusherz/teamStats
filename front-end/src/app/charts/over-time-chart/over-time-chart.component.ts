@@ -14,8 +14,10 @@ export class OverTimeChartComponent implements OnInit {
 		  TEAM WIN LOSS OVER TIME
   
 	  */
-	public overTimeChart = undefined;
-	public season: string = 'Season 5 2018';
+	public overTimeChart1 = undefined;
+	public overTimeChart2 = undefined;
+	public season1: string = 'Season 5 2018';
+	public season2: string = 'Season 5 2018';
 	public maps: string[] = ['Bazaar', 'Cargo', 'Downfall', 'Quarantine', 'Suburbia', 'Subway', 'Tanker']
 	public map: string = undefined;
 	public teamName: string = undefined;
@@ -34,29 +36,38 @@ export class OverTimeChartComponent implements OnInit {
 	}
 
 	getChartData() {
-		this.output_season.emit(this.season);
+		this.output_season.emit(this.season1);
 		if (this.map != undefined && this.teamName != undefined) {
-			this.http.post(this.url, { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
-				this.overTimeChart.data.datasets = data['dataPoints'];
+			this.http.post(this.url, { season: this.season1, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
+				this.overTimeChart1.data.datasets = data['dataPoints'];
 				let labels = [];
 				for (let label of data['labels']) {
 					labels.push(new Date(label['date']).toDateString() + ' ' + label['team'])
 				}
-				this.overTimeChart.data.labels = labels;
-				this.overTimeChart.update();
+				this.overTimeChart1.data.labels = labels;
+				this.overTimeChart1.update();
+			});
+			this.http.post(this.url, { season: this.season2, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe(data => {
+				this.overTimeChart2.data.datasets = data['dataPoints'];
+				let labels = [];
+				for (let label of data['labels']) {
+					labels.push(new Date(label['date']).toDateString() + ' ' + label['team'])
+				}
+				this.overTimeChart2.data.labels = labels;
+				this.overTimeChart2.update();
 			});
 		}
 	}
 
 	overTimeChartInit() {
-		this.http.post(this.url, { season: this.season, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe((data) => {
-			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas");
+		this.http.post(this.url, { season: this.season1, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe((data) => {
+			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas1");
 			let ctx = canvas.getContext("2d");
 			let labels = [];
 			for (let label of data['labels']) {
 				labels.push(new Date(label['date']).toDateString() + ' VS ' + label['team'])
 			}
-			this.overTimeChart = new Chart(ctx, {
+			this.overTimeChart1 = new Chart(ctx, {
 				type: 'line',
 				data: {
 					labels: labels,
@@ -68,7 +79,35 @@ export class OverTimeChartComponent implements OnInit {
 					},
 					scales: {
 						xAxes: [{
+							display: false
+						}],
+						yAxes: [{
 							display: true
+						}],
+					}
+				}
+			});
+		});
+		this.http.post(this.url, { season: this.season2, mapName: this.map.toLowerCase(), teamName: this.teamName }).subscribe((data) => {
+			let canvas = <HTMLCanvasElement>document.getElementById("overTimeCanvas2");
+			let ctx = canvas.getContext("2d");
+			let labels = [];
+			for (let label of data['labels']) {
+				labels.push(new Date(label['date']).toDateString() + ' VS ' + label['team'])
+			}
+			this.overTimeChart2 = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: labels,
+					datasets: data['dataPoints']
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					scales: {
+						xAxes: [{
+							display: false
 						}],
 						yAxes: [{
 							display: true

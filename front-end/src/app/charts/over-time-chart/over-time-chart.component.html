@@ -1,21 +1,37 @@
 <div class="col s12">
-  <div class="col s12 input-field">
-    <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-        <option selected value="Season 5 2018">Season 5 - 2018</option>
-        <option value="Season 6 2018">Season 6 - 2018</option>
-      </select>
-    <select [(ngModel)]="teamName" (change)="getChartData()" name="teamOverTime" style="display: block; margin-top: 0.5rem">
-      <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-    </select>
-    <select [(ngModel)]="map" (change)="getChartData()" name="map" style="display: block; margin-top: 0.5rem">
-      <option *ngFor="let map of maps" [ngValue]="map">{{map}}</option>
-    </select>
-  </div>
+	<div class="col s12 input-field">
+		<div class="col s12 m6">
+			<select [(ngModel)]="season1" (change)="getChartData()" name="season" style="display: block; margin-bottom: 0.5rem">
+				<option selected value="Season 5 2018">Season 5 - 2018</option>
+				<option value="Season 6 2018">Season 6 - 2018</option>
+			</select>
+			<select [(ngModel)]="season2" (change)="getChartData()" name="season" style="display: block; margin-bottom: 0.5rem">
+				<option selected value="Season 5 2018">Season 5 - 2018</option>
+				<option value="Season 6 2018">Season 6 - 2018</option>
+			</select>
+		</div>
+		<div class="col s12 m6">
+			<select [(ngModel)]="teamName" (change)="getChartData()" name="teamOverTime" style="display: block; margin-bottom: 0.5rem">
+				<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+			</select>
+			<select [(ngModel)]="map" (change)="getChartData()" name="map" style="display: block; margin-bottom: 0.5rem">
+				<option *ngFor="let map of maps" [ngValue]="map">{{map}}</option>
+			</select>
+		</div>
+	</div>
 
-  <h3>Team Win Loss Over Time</h3>
-  <div class="col s12 m12">
-    <div id="overTimeChartContainer" style="width: 100%; height: 100%; display: inline-block; margin-bottom: 2rem">
-      <canvas id="overTimeCanvas">{{ overTimeChart }}</canvas>
-    </div>
-  </div>
+	<div class="col s12">
+		<div class="col s12 m6">
+			<h3>{{season1}}</h3>
+			<div id="overTimeChartContainer" style="width: 100%; height: 100%; display: inline-block; margin-bottom: 2rem">
+				<canvas id="overTimeCanvas1">{{ overTimeChart1 }}</canvas>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<h3>{{season2}}</h3>
+			<div id="overTimeChartContainer" style="width: 100%; height: 100%; display: inline-block; margin-bottom: 2rem">
+				<canvas id="overTimeCanvas2">{{ overTimeChart2 }}</canvas>
+			</div>
+		</div>
+	</div>
 </div>

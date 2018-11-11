@@ -1,43 +1,43 @@
 <div class="col s12">
-  <div class="col s12 m4" style="margin-top: 1rem;">
-    <div class="col s12 input-field">
-      <div class="col s12">
-        <button class="common positive-primary" style="width: 100%" (click)="getChartData()">Refresh Chart</button>
-        <button class="common positive-primary" style="width: 100%" (click)="getMatches()">Get Matches</button>
-      </div>
-    </div>
-    <div class="col s12 input-field">
-      <select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block; margin-top: 0.5rem">
-        <option selected value="Season 5 2018">Season 5 - 2018</option>
-        <option value="Season 6 2018">Season 6 - 2018</option>
-      </select>
-      <select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
-        <option selected [value]=undefined>Select a Team</option>
-        <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-      </select>
-      <select [(ngModel)]="teamTwo" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
-        <option selected [value]=undefined>Select a Team</option>
-        <option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
-      </select>
-    </div>
-  </div>
-  <!--
+	<div class="col s12" style="margin-top: 1rem;">
+		<div class="col s12 m6">
+			<div class="col s12">
+				<button class="common positive-primary" style="width: 100%" (click)="getChartData()">Refresh Chart</button>
+				<button class="common positive-primary" style="width: 100%; margin-top: 1rem;" (click)="getMatches()">Get Matches</button>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<select [(ngModel)]="season" (change)="getChartData()" name="season" style="display: block;">
+				<option selected value="Season 5 2018">Season 5 - 2018</option>
+				<option value="Season 6 2018">Season 6 - 2018</option>
+			</select>
+			<select [(ngModel)]="teamOne" (change)="getChartData()" name="teamOne" style="display: block; margin-top: 0.5rem">
+				<option selected [value]=undefined>Select a Team</option>
+				<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+			</select>
+			<select [(ngModel)]="teamTwo" (change)="getChartData()" name="teamTwo" style="display: block; margin-top: 0.5rem">
+				<option selected [value]=undefined>Select a Team</option>
+				<option *ngFor="let teamName of teamNames" [ngValue]="teamName">{{teamName}}</option>
+			</select>
+		</div>
+	</div>
+	<!--
 
 		CHARTS
 
 	-->
-  <div class="col s12 m8">
-    <div class="col s12">
-      <h4>Rounds Won And Loss</h4>
-      <div id="roundWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
-        <canvas id="roundWinLossCanvas">{{ roundsWinLossChart }}</canvas>
-      </div>
-    </div>
-    <div class="col s12">
-      <h4>Maps Won And Loss</h4>
-      <div id="mapWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
-        <canvas id="mapWinLossCanvas">{{ mapsWinLossChart }}</canvas>
-      </div>
-    </div>
-  </div>
+	<div class="col s12">
+		<div class="col s12 m6">
+			<h4>Rounds Won And Loss</h4>
+			<div id="roundWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
+				<canvas id="roundWinLossCanvas">{{ roundsWinLossChart }}</canvas>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<h4>Maps Won And Loss</h4>
+			<div id="mapWinLossChartContainer" style="width: 100%; display: inline-block; margin-bottom: 2rem">
+				<canvas id="mapWinLossCanvas">{{ mapsWinLossChart }}</canvas>
+			</div>
+		</div>
+	</div>
 </div>

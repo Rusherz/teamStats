@@ -1,12 +1,11 @@
+"use strict"
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
+
 const charts = require('./routes/charts/charts');
 const matches = require('./routes/matches');
 const users = require('./routes/users');
@@ -35,9 +34,6 @@ mongoose.connect('mongodb://db_user:db_user_123@ds227853.mlab.com:27853/onward_s
 	})
 	.then(() => console.log('MongoDB Connected'))
 	.catch(err => console.log(err));
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use('/api/charts', charts);
 app.use('/api/matches', matches);

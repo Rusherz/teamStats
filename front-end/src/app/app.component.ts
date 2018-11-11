@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
 
-	public showChart: number = 2;
+	public showChart: number = 0;
 
 	public teamNames: string[] = [];
 

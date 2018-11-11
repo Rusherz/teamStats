@@ -1,3 +1,4 @@
+"use strict"
 //Team Model
 const Season = require("../../models/Season");
 

@@ -1,3 +1,4 @@
+"use strict"
 //Match Model
 const Match = require("../../models/Match");
 const mongoose = require('mongoose');
@@ -33,7 +34,7 @@ let MatchFunctions = {
 	},
 	'findAllMatches': (query = {}) => {
 		return new Promise((resolve, reject) => {
-			Match.find(query).sort({date: -1}).exec(function (err, results) {
+			Match.find(query).sort({date: 1}).exec(function (err, results) {
 				if (err) {
 					console.error(err);
 					reject(err);

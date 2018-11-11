@@ -1,5 +1,5 @@
-FROM node:7
-WORKDIR /usr/src/api
-RUN npm install
+FROM openstf/stf-armv7l
+RUN apk add --update nodejs
 RUN npm install -g nodemon
+WORKDIR /usr/src/api
 EXPOSE 4000
