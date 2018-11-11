@@ -1,0 +1,20 @@
+version: "2"
+services:
+  web_api:
+    container_name: api
+    restart: always
+    volumes:
+      - ./api:/usr/src/api
+    build: ./api
+    ports:
+      - "4000:4000"
+    command: nodemon .
+  web_frontend:
+    container_name: fontend
+    restart: always
+    volumes:
+      - ./front-end:/usr/src/app
+    build: ./front-end
+    ports:
+      - "80:4200"
+    command: ng serve --prod --host 0.0.0.0
