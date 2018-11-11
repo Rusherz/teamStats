@@ -1,4 +1,4 @@
-FROM openstf/stf-armv7l
+FROM resnullius/alpine-armv7l
 RUN apk add --update nodejs
 RUN npm install -g nodemon
 WORKDIR /usr/src/api
