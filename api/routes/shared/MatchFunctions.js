@@ -32,7 +32,8 @@ let MatchFunctions = {
 			});
 		});
 	},
-	'findAllMatches': (query = {}) => {
+	'findAllMatches': (query) => {
+		if(!query) query = {};
 		return new Promise((resolve, reject) => {
 			Match.find(query).sort({date: 1}).exec(function (err, results) {
 				if (err) {
