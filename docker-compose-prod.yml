@@ -17,4 +17,4 @@ services:
     build: ./front-end
     ports:
       - "80:4200"
-    command: ng serve --prod --host 0.0.0.0
+    command: ng serve --host 0.0.0.0 --disable-host-check
